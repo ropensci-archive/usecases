@@ -8,7 +8,7 @@ require(rplos)
 
 # citation distribution
   # Get DOIs for all PLoS One articles
-
+searchplos('the', 'id', 1000)
 
   # Get total citation from all sources for each DOI
 almtotcites()
