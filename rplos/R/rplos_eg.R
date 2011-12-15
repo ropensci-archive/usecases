@@ -20,14 +20,12 @@ GetAllDOIs <- function(search) {   # Get DOIs for all PLoS One articles
 results <- GetAllDOIs('*:*') # get all DOIs
 results_ <- as.vector(sapply(results, function(x) x[[1]], simplify=T)) # to vector
 
-  # Get article DOIs only (i.e., remove image DOIs)
-DO THIS BEFORE NEXT STEP
+  # Trim whitespace
+results_trim <- sapply(results_, str_trim, side='both', USE.NAMES=F) # trim whitespace
 
   # Get total citation from all sources for each DOI
-almtotcites(str_trim(as.character(results[[1]][1,1]), "both"))
-almtotcites(str_trim(results_[1], "both"))
-citesout <- laply(results_[1:15], function(x) almtotcites(str_trim(x,'both')), .progress='text')
-
+crossrefcites <- laply(results_trim[1:15], function(x) 
+  almplosallviews(x, 'crossref', F, F, 'json')$article$citations_count, .progress='text')
 
 # keywords in the most cited articles
 
