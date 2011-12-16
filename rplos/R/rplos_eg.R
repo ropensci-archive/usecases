@@ -29,13 +29,15 @@ crossrefcites <- laply(results_trim, function(x)
 dat <- as.data.frame(crossrefcites)
 ggplot(dat, aes(crossrefcites)) +
   theme_bw(base_size=18) +
-  geom_histogram() +
+  geom_histogram()
 
 # keywords in the most cited articles
-plosword()
-
+  # plosword() maybe as an option
 
 # growth of plos one
+  # plot citations by year
+  
+  
   # plot number of articles by year
 
 
