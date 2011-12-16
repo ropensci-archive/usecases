@@ -7,23 +7,16 @@ install_github("rplos", "ropensci")
 require(rplos)
 
 # Citation distribution
-GetAllDOIs <- function(search) {   # Get DOIs for all PLoS One articles
-  searchplosfx <- function(x, y){
-#     searchplos(terms=x, 
-#               fields='id', 
-#               toquery='doc_type:full', 
-#               start=y, 
-#               limit=250)[[2]]
-    searchplos(terms=x, 
-              fields='id', 
-              toquery=list('cross_published_journal_key:PLoSONE', 'doc_type:full'), 
-              start=y, 
-              limit=250)[[2]]}
-  llply(seq(0,1250,250), function(t) 
-    searchplosfx(search, t), .progress='text')
+GetAllDOIs <- function(search, start, sleep) {   # Get DOIs for all PLoS One articles
+  Sys.sleep(sleep)
+  searchplos(terms=search, 
+            fields='id', 
+            toquery=list('cross_published_journal_key:PLoSONE', 'doc_type:full'), 
+            start=start, 
+            limit=250)[[2]]
 }
-results <- GetAllDOIs('*:*') # get all DOIs
-results_ <- as.vector(sapply(results, function(x) x[[1]], simplify=T)) # to vector
+results2 <- llply(seq(0,500,250), function(t) GetAllDOIs('*:*', t, sleep=0.2), .progress='text')
+results_ <- do.call(c, results2)
 
   # Trim whitespace
 results_trim <- sapply(results_, str_trim, side='both', USE.NAMES=F) # trim whitespace
@@ -39,7 +32,7 @@ ggplot(dat, aes(crossrefcites)) +
   geom_histogram() +
 
 # keywords in the most cited articles
-
+plosword()
 
 
 # growth of plos one
@@ -51,5 +44,4 @@ ggplot(dat, aes(crossrefcites)) +
 
 
 # alt-metrics about plos one articles
-
 
