@@ -15,7 +15,7 @@ GetAllDOIs <- function(search, start, sleep) {   # Get DOIs for all PLoS One art
             start=start, 
             limit=250)[[2]]
 }
-results2 <- llply(seq(0,7500,250), function(t) GetAllDOIs('*:*', t, sleep=0.3), .progress='text')
+results2 <- llply(seq(0,500,250), function(t) GetAllDOIs('*:*', t, sleep=0.1), .progress='text')
 results_ <- do.call(c, results2)
 
   # Trim whitespace
@@ -23,7 +23,7 @@ results_trim <- sapply(results_, str_trim, side='both', USE.NAMES=F) # trim whit
 
   # Get CrossRef citations for each DOI
 crossrefcites <- laply(results_trim, function(x) 
-  almplosallviews(x, 'crossref', F, F, 'json', sleep=0.2)$article$citations_count, 
+  almplosallviews(x, 'crossref', F, F, 'json', sleep=0)$article$citations_count, 
   .progress='text')
 
   # plot distribution
@@ -35,7 +35,7 @@ ggplot(dat, aes(crossrefcites)) +
 # growth of plos one
   # plot citations by year
     # get year published for each DOI
-years <- laply(results_trim, function(x) almdatepub(x, 'year'), .progress='text')
+years <- laply(results_trim, function(x) almdatepub(x, 'year', sleep=0.1), .progress='text')
   
     # combine citations and years for each DOI
 citesyears <- data.frame(crossrefcites, years)
@@ -43,11 +43,9 @@ citesyears_ <- ddply(citesyears, .(years), summarise,
                     meancites = mean(crossrefcites))
 
   # plot number of articles by year
-ggplot(citesyears_, aes(years, crossrecites)) +
+ggplot(citesyears_, aes(years, meancites)) +
   theme_bw(base_size=18) +
   geom_line()
-
-
 
 # keywords in the most cited articles
   # plosword() maybe as an option
