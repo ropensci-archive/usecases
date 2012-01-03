@@ -5,6 +5,7 @@
 require(devtools)
 install_github("rplos", "ropensci")
 require(rplos)
+require(plyr)
 
 # Citation distribution
 GetAllDOIs <- function(search, start, sleep) {   # Get DOIs for all PLoS One articles
