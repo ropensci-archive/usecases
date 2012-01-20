@@ -7,11 +7,7 @@ setwd("/Users/ScottMac/github/rOpenSci/usecases/rplos/R")
 require(devtools)
 install_github("rplos", "ropensci", "develop")
 require(rplos)
-<<<<<<< HEAD
-require(plyr)
-=======
 require(plyr); require(RCurl); require(RJSONIO)
->>>>>>> edited code
 
 # Citation distribution
 GetAllDOIs <- function(search, start, sleep) {   # Get DOIs for all PLoS One articles
